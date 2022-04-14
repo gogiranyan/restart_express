@@ -1,10 +1,8 @@
 let express = require('express');//1.載入express模組
 let app = express();// 2.使用express
-let fs = require('fs-extra');
-let axios = require('axios');
 let path = require('path');
-let io = require('socket.io');
-let i = 20;
+var server = require('http').createServer(app);//建立http伺服器
+let io = require('socket.io')(server);
 
 app.use('/',express.static(path.join(__dirname,'./public')));
 // app.get('/', function (req, res) {
@@ -55,24 +53,10 @@ app.listen(3000, '127.0.0.1', function() {
     console.log('Listening to port:  ' + 3000);
 });
 
+io.on('connection', function(socket){
+  /*監聽登入事件*/
+  socket.on('login', function(data){
+      console.log(data)
+  })
+})
 
-
-// app.listen(80);
-// var handler = (req, res) => {
-//   fs.readFile(__dirname + './index.html', (err, data) => {
-//   if (err) {
-//     res.writeHead(500);
-//     return res.end('Error loading index.html');
-//   }
-//   res.writeHead(200);
-//   res.end(data);
-//   })
-// }
-// io.on('connection', (socket) => {
-//   socket.emit('news', {  //觸發'news'事件
-//   hello: 'world'
-//   });
-//   socket.on('my other event', (data) => {  //監聽'my other event'事件，有結果後輸出
-//   console.log(data);
-//   })
-// })

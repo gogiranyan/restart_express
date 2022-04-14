@@ -1,16 +1,65 @@
+
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8">
-			<title>Hello HTML</title>
-		</head>
-		<body>
-			<h1>看到這句話表示html頁面成功顯示了。</h1>
-            <form method = "post" action="/">
-                <input type="text" name="id"/>
-                <input type="submit"/>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatroom</title>
+    <link type="text/css" rel="stylesheet" href="css/chat.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Noto+Sans+TC:wght@100;300;400;500;700&display=swap" rel="stylesheet">        
+    <script type="text/javascript" src="js/socket.io.js"></script>
+    <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/js.js"></script>
+</head>
+<body>
 
-            </form>
-		</body>
-	</head>
+<!--登錄頁面-->
+<div class="login-wrap">
+    <div class="login-con">
+        <p>🍇</p>
+        <span>Choose a great name</span>
+        <input type="text" placeholder="Grape" id="loginName">
+        <button class="login-btn">Start</button>
+    </div>
+</div>
+<script>
+	$(function(){
+    /*建立socket連接，連向server監聽的端口號*/
+    var socket = io('ws://localhost:3000');
+    /*你的名稱*/
+    var myName = null;
+    console.log('inin');
+    /*登入事件*/
+    $('.login-btn').click(function(){
+        console.log('inin');
+        myName = $.trim($('#loginName').val());
+        if(myName){
+            /*發送事件*/
+            socket.emit('login', {username: myName})
+        }else{
+            alert('Please enter a name:)')
+        }
+    })
+})
+</script>
+
+<!--聊天介面-->
+<div class="chat-wrap hide">
+    <div class="chat-wrap-top">
+        <h3 id="chat-title"> </h3>
+        <button class="leaveBtn"><img src="images/cross.png"></button>
+    </div>
+    <div class="chat-wrap-main" id="chat-wrap">
+        <div class="chat-con" clearfix></div>
+        <div class="bottom">
+            <input type="text" id="sendtxt" placeholder="Type a message">
+            <button class="sendBtn">
+                <img src="images/send.png">
+            </button>
+        </div>
+    </div>
+</div>
+    
+</body>
 </html>
